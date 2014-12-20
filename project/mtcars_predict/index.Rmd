@@ -1,0 +1,63 @@
+---
+title       : Prediction on MPG 
+subtitle    : 
+author      : Pattareeya
+job         : Data Scientist
+framework   : revealjs      # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+# Prediction on MPG 
+```{r,echo=FALSE}
+library(datasets)
+data(mtcars)
+```
+```{r,echo=FALSE}
+mtcars$cyl  <- factor(mtcars$cyl)
+mtcars$vs   <- factor(mtcars$vs)
+mtcars$am   <- factor(mtcars$am, labels = c("Automatic","Manual"))
+mtcars$gear <- factor(mtcars$gear)
+mtcars$carb <- factor(mtcars$carb)
+```
+---
+## Would it be nice to be able to predict the MPG based on several variables?
+Base on the dataset **mtcars** which was extracted from the 1974 Motor Trend US magazine and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973-74 models).
+
+The **mtcars** dataset contains mpg and 10 variables which are
+```{r, echo=FALSE}
+names(mtcars)
+```
+
+---
+
+## The Better model
+We have created the better model:
+```{r,echo=FALSE,results='hide'}
+model1 <- lm(mpg ~ ., mtcars) #initial model
+best_model <- step(model1, direction = "both") #best fit model
+```
+
+```{r,echo=FALSE}
+summary(best_model)
+```
+where we only need fewer variables which are *cyl*, *hp*, *wt* and *am* for the prediction.
+
+---
+
+## Determine how good our model is
+
+- The R-squared of the model where we include all predictors is `r format(summary(model1)$r.squared, big.mark = ' ')` 
+- The R-squared of our better model is `r format(summary(best_model)$r.squared, big.mark = ' ')`
+- The diffence is only `r format(summary(model1)$r.squared - summary(best_model)$r.squared, big.mark=' ')`
+
+---
+
+### With almost the same accuracy but the fewer variables, we have created the better  MPG prediction model.
+
+You now can predict the MPG with the lesser variable.  If you are interested, please visit our [app](https://pattareeya.shinyapps.io/project) page.
+
+

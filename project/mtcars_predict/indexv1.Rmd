@@ -1,0 +1,83 @@
+---
+title       : Prediction on MPG 
+subtitle    : 
+author      : Pattareeya
+job         : Data Scientist
+framework   : html5slides      # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Prediction on MPG using regression model on mtcars data set
+we want to find the best regression model to determine MPG. 
+Source: mtcars data set from R package
+```{r,echo=FALSE}
+library(datasets)
+```
+
+```{r}
+data(mtcars)
+```
+```{r,echo=FALSE}
+mtcars$cyl  <- factor(mtcars$cyl)
+mtcars$vs   <- factor(mtcars$vs)
+mtcars$am   <- factor(mtcars$am, labels = c("Automatic","Manual"))
+mtcars$gear <- factor(mtcars$gear)
+mtcars$carb <- factor(mtcars$carb)
+pairs(mtcars, panel = panel.smooth, col = 3 )
+```
+
+---
+
+## Create Best Fit Model 
+
+```{r,results='hide'}
+model1 <- lm(mpg ~ ., mtcars) #initial model
+best_model <- step(model1, direction = "both") #best fit model
+```
+
+```{r,echo=FALSE}
+summary(best_model)
+```
+
+
+It shows that *cyl*, *hp*, *wt* and *am* are the predictors on our model
+
+---
+
+## Determine how fit the model is
+
+We use R-squared to determine how fit the regression model to the data.
+
+```{r}
+summary(best_model)$r.squared
+```
+
+
+It shows that the R-squared is high enough for us to use this as the prediction model.
+
+---
+
+## Residulas, Normal Q-Q, Scalse-Location & Leverage
+
+```{r,echo=FALSE}
+par(mfrow=c(2,2))
+plot(best_model)
+title("Figure 2: Residuals, Normal Q-Q, Scale-Location, & Leverage", line = -1,  outer = TRUE)
+```
+
+
+From these plots, we can say that our model is really really good model.
+
+---
+
+## Conclusion
+
+We want to predict the MPG and select the most influent predictors from linear regression model. As the result, those influent predictors are
+- Cylinder: 4, 6, 8
+- Transmission Type: Automatic, Manual
+- Horse Power: 52-335
+- Weight( lb/1000): 1-5
